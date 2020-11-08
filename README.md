@@ -9,10 +9,10 @@ For the test data and GeoLino dataset see https://github.com/Jmallins/ZEST-data
 If you use this data please cite
 
 ```BibTex
-@article{mallinson2020,
+@inproceedings{mallinson2020,
   title={Zero-Shot Crosslingual Sentence Simplification},
   author={Mallinson, Jonathan and Sennrich, Rico and Lapata, Mirella},
-  journal={EMNLP},
-  year={2020}
+  year={2020},
+  booktitle={2020 Conference on Empirical Methods in Natural Language Processing (EMNLP 2020)}
 }
 ```
