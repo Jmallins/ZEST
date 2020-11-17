@@ -1,3 +1,5 @@
+#Copyright 2020 Google LLC.
+#SPDX-License-Identifier: Apache-2.0
 import torch
 
 from onmt.translate.decode_strategy import DecodeStrategy
@@ -56,11 +58,11 @@ class BeamSearch(DecodeStrategy):
     def __init__(self, beam_size, batch_size, pad, bos, eos, n_best, mb_device,
                  global_scorer, min_length, max_length, return_attention,
                  block_ngram_repeat, exclusion_tokens, memory_lengths,
-                 stepwise_penalty, ratio,i2w,batch,threshold,len1,badsynf):
+                 stepwise_penalty, ratio,i2w,batch):
         super(BeamSearch, self).__init__(
             pad, bos, eos, batch_size, mb_device, beam_size, min_length,
             block_ngram_repeat, exclusion_tokens, return_attention,
-            max_length,i2w,batch,threshold,len1,badsynf)
+            max_length,i2w,batch)
         # beam parameters
         self.global_scorer = global_scorer
         self.beam_size = beam_size

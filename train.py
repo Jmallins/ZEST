@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+#Copyright 2020 Google LLC.
+#SPDX-License-Identifier: Apache-2.0
 """Train models."""
 import os
 import signal

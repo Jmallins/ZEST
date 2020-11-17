@@ -1,3 +1,5 @@
+#Copyright 2020 Google LLC.
+#SPDX-License-Identifier: Apache-2.0
 from __future__ import division
 import torch
 from onmt.translate import penalties
@@ -34,7 +36,7 @@ class Beam(object):
                  min_length=0,
                  stepwise_penalty=False,
                  block_ngram_repeat=0,
-                 exclusion_tokens=set(),tgt=None):
+                 exclusion_tokens=set()):
 
         self.size = size
         self.tt = torch.cuda if cuda else torch
@@ -73,18 +75,7 @@ class Beam(object):
         self.stepwise_penalty = stepwise_penalty
         self.block_ngram_repeat = block_ngram_repeat
         self.exclusion_tokens = exclusion_tokens
-        self.pgood = None
-        if tgt is not None and tgt !=[]:
-            print ("in it")
-            self.pgood = []
-            for t in tgt:
-                            #print (t)
-                t = int(t)
-                if t == int(eos) or t ==int(bos) or t== int(pad):
-                    continue
-                
-                    
-                pgood.append(t)
+  
 
 
     @property
@@ -129,21 +120,7 @@ class Beam(object):
                 if self.next_ys[-1][i] == self._eos:
                     beam_scores[i] = -1e20
 
-            if self.pgood is not None:
-                print ("None")
-                le = len(self.next_ys)
-                for j in range(self.next_ys[-1].size(0)):
-                    hyp, _ = self.get_hyp(le - 1, j)
-                    ngrams = set()
-                    fail = False
-                    gram = []
-                    for i in range(le - 1):
-                        if i >= len(self.pgood):
-                            break
-                        if (int(hyp[i])) != self.pgood[i]:
-                            beam_scores[j] = -10e20
-                        else:
-                            beam_scores[j] = 0
+           
 
 
             # Block ngram repeats

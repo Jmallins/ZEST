@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+#Copyright 2020 Google LLC.
+#SPDX-License-Identifier: Apache-2.0
 """Training on a single process."""
 import os
 
@@ -79,7 +81,6 @@ class critic(nn.Module):
         self.grad_rev = GradientReversal()
     def forward(self, x):
         x = self.grad_rev(x)
-        #x = x.view(-1, 4*4*50)
         x = F.leaky_relu(self.fc1(F.dropout(x,p=0.1)))
         x = F.leaky_relu(self.fc2(F.dropout(x,p=0.1)))
         x = F.leaky_relu(self.fc3(F.dropout(x,p=0.1)))
@@ -101,10 +102,7 @@ def main(opt, device_id):
     init_logger(opt.log_file)
     # Load checkpoint if we resume from a previous training.
     f = open(opt.data,"rb")
-    vocab,datas,vtags = pickle.load(f)
-    #datas 
-    vocab2 = vocab
-    print (vocab)
+    vocab2,datas,vtags = pickle.load(f)
     f.close()
     if opt.train_from:
         logger.info('Loading checkpoint from %s' % opt.train_from)
@@ -121,15 +119,12 @@ def main(opt, device_id):
         model_opt = opt
 
         vocab = torch.load(vocab)
-        print (vocab)
     # check for code where vocab is saved instead of fields
     # (in the future this will be done in a smarter way)
     if old_style_vocab(vocab):
-        print ("old")
         fields = load_old_vocab(
             vocab, opt.model_type, dynamic_dict=opt.copy_attn)
     else:
-        print ("new")
         fields = vocab
 
     # Report src and tgt vocab sizes, including for features
@@ -157,11 +152,8 @@ def main(opt, device_id):
         model.critic2 = None
 
 
-    if opt.domain:
-        model.critic3 =  critic()
-        model.critic3.to(model.device)
-    else:
-        model.critic3 = None
+
+    model.critic3 = None
 
 
 
@@ -183,15 +175,8 @@ def main(opt, device_id):
 
 
     train_iters =[]
-    print (datas)
     for data in datas:
-        print (data)
-        print (data[1]+".train")
         ttt = build_dataset_iter(data[1]+".train",fields, opt)
-        if(ttt is  None):
-            print (data[1]+".train")
-            assert(False)
-        print (data[2])
         train_iters.append((data[0],ttt,data[2]))
 
 

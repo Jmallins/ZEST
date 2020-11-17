@@ -1,3 +1,5 @@
+#Copyright 2020 Google LLC.
+#SPDX-License-Identifier: Apache-2.0
 """
     This is the loadable seq2seq trainer library that is
     in charge of training details, loss compute, and statistics.
@@ -37,7 +39,6 @@ def build_trainer(opt, device_id, model, fields, optim, model_saver=None):
         model, tgt_field, opt, train=False)
     global xxx
     xxx = tgt_field.vocab.itos
-    print ([5])
     #assert(False)
     trunc_size = opt.truncated_decoder  # Badly named...
     shard_size = opt.max_generator_batches if opt.model_dtype == 'fp32' else 0
@@ -241,48 +242,24 @@ class TrainerC(object):
                 else:
                 
                     (batches, normalization) = next(bn)
-         
-                    #print ("init")
+    
 
-                    if self.shuffletags:
-                        assert(False)
-                        ntags=tags[:-1]
-                        #print ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-                        random.shuffle(ntags)
-                        ntags = ntags+[tags[-1]]
-                    else:
-                        ntags = tags
-                    #print (step)
-                    if self.shuffletags and False:
-                        utags = list(set(tags))
-
-
-                        random.shuffle(utags)
-                        ntags = []
-                        for u in utags:
-                            for _ in range(tags.count(u)):
-                                ntags.append(u)
-
+                    ntags = tags
+                   
 
                     step = self.optim.training_step
                     #self.model.critic.lambda_= min(1,step/200000)
                     p =min(1,(step-100)/220000)
 
-                    if step < 100:
-                        self.model.critic.lambda_= 0
-                        if self.model.critic2 is not None:
-                            self.model.critic2.lambda_= 0
-                        if self.model.critic3 is not None:
-                            self.model.critic3.lambda_= 0
-                    else:
-    
-                        sl  = max(0, 2. / (1. + np.exp(-10. * p)) - 1)
-                        self.model.critic.lambda_=sl
+             
 
-                        if self.model.critic2 is not None:
-                            self.model.critic2.lambda_= sl
-                        if self.model.critic3 is not None:
-                            self.model.critic3.lambda_= sl
+                    sl  = max(0, 2. / (1. + np.exp(-10. * p)) - 1)
+                    self.model.critic.lambda_=sl
+
+                    if self.model.critic2 is not None:
+                        self.model.critic2.lambda_= sl
+                    if self.model.critic3 is not None:
+                        self.model.critic3.lambda_= sl
 
                     if self.gpu_verbose_level > 1:
                         logger.info("GpuRank %d: index: %d", self.gpu_rank, i)
@@ -295,43 +272,9 @@ class TrainerC(object):
                         normalization = sum(onmt.utils.distributed
                                             .all_gather_list
                                             (normalization))
+           
 
-                    #print (tags)
-                    randomint = -1
-
-                    if "LM" in ntags:
-                        layeronly = 1
-                    else:
-                        layeronly = 1- float(report_stats.accuracy()/100)
-
-                    if randomint > layeronly:
-                        freezeit = True
-                    else:
-                        freezeit = False
-                    freezeit = False
-
-
-
-                    if True  and "SIMP" in ntags and "DE" in ntags:
-                        freezeit = True
-
-                    if True:
-                        if freezeit or "SIMP" in ntags:
-                            for p in self.model.decoder.parameters():
-                                p.requires_grad = False
-
-                            if self.model.decoder2 is not None:
-                                for p in self.model.decoder2.parameters():
-                                    p.requires_grad = False
-
-
-                        else:
-                            for p in self.model.decoder.parameters():
-                                p.requires_grad = True
-                            if self.model.decoder2 is not None:
-                                for p in self.model.decoder2.parameters():
-                                    p.requires_grad = True
-
+        
                     #print ("gradf")
                     self._gradient_accumulation(
                         batches, normalization, total_stats,
@@ -345,12 +288,6 @@ class TrainerC(object):
                         self.optim.learning_rate(),
                         report_stats)
 
-                if smooth != 0 and step % smooth == 0:
-                    sizes = [xxx+ 0.02 for xxx in  sizes]
-                    tsize = sum(sizes)
-                    sizes = [xxx/tsize for xxx in  sizes]
-                    #layeronly = max(layeronly -0.01,0.05)
-                    
 
 
                 if valid_iter is not None and step % valid_steps == 0 and step not in seenstep:
@@ -413,9 +350,7 @@ class TrainerC(object):
 
                 # F-prop through the model.
                 outputs, attns = valid_model(src, tgt, src_lengths,tags)
-                #batch.tgt[1,:,:]= self.valid_loss.padding_idx
-                #batch.tgt[2,:,:] = self.valid_loss.padding_idx
-                #batch.tgt[3,:,:] = self.valid_loss.padding_idx
+  
                 # Compute loss.
                 _, batch_stats = self.valid_loss(batch, outputs, attns)
 
@@ -436,31 +371,11 @@ class TrainerC(object):
             self.optim.zero_grad()
 
         for batch in true_batches:
-            #print (batch)
-            #print (batch.indices)
-            #print (batch.src_map)
+
             src, src_lengths = batch.src if isinstance(batch.src, tuple) \
                 else (batch.src, None)
             if src_lengths is not None:
                 report_stats.n_src_words += src_lengths.sum().item()
-            if "LM" not in tags:
-                noise = 0.1
-                if (tags.count("EN") ==2 and "SIMPLY" not in tags) or tags.count("DE") ==2:
-                    noise = 0.2
-                shaped = (src_lengths[-1],batch.src[0].shape[1])#,
-                #shaped = (batch.src[0].shape),)
-                probs = torch.empty(shaped).cuda().uniform_(0, 1)
-                ones = torch.ones(batch.src[0].shape,dtype=probs.dtype).cuda()
-         
-                ones[:src_lengths[-1],:,0] = probs #
-
-
-                zs =  torch.zeros(batch.src[0].shape,dtype=batch.src[0].dtype)
-                zs = zs.cuda()
-                src =batch.src[0]#torch.where(ones > noise, batch.src[0],zs )
-
-
-            #assert(False)
             target_size = batch.tgt.size(0)
             # Truncated BPTT: reminder not compatible with accum > 1
             if self.trunc_size:
@@ -476,96 +391,45 @@ class TrainerC(object):
             for j in range(0, target_size-1, trunc_size):
                 # 1. Create truncated target.
                 tgt = tgt_outer[j: j + trunc_size]
-
-                #assert(len(tags)==4)
                 lang = tags[-1]
-                #assert(lang=="DE" or lang =="EN")
                 tags =tags[:-1]
-                assert(tags[-1]=="DE" or tags[-1]=="EN")
                 if self.grad_accum_count == 1:
                     self.optim.zero_grad()
                 outputs, attns,rep,rep2 = self.model(src, tgt, src_lengths, tags=tags,nograd=freezeit,bptt=bptt,dumpenc=True)
                 bptt = True
-                #print (rep.shape)
-                #print (type(rep))
-                #print (src_lengths)
-                #print (rep.shape)
-                #print (src_lengths)
-                
 
-                if False:
-                    maxlen = rep.size(0)
-                    mask = torch.arange(maxlen)[:,None].cuda() < src_lengths[None,:].cuda()
-
-                    #print (mask)
-                    #print (mask.shape)
-                    #print (mask)
-
-                    mask = mask.cuda()
-                    rep[~mask] = float('-inf')
-                #print (rep)
-                #assert(False)
-                #print (src_lengths)
-
-                #print (rep.shape)
-                #print (rep.reshape(-1,512).shape)
-
-                #rep =  torch.max(rep,1,keepdim=False).values
-
-                #print (rep.shape)
-                #print (rep.shape)
-                #print (type(rep))
-                if "LM" not in tags and True:
+                if  True:
                  
-                    rep = rep[:min(src_lengths),:,:] ####change back to rep
+                    rep = rep[:min(src_lengths),:,:] 
                     rep = rep.view(-1,512)
                     cpred = self.model.critic(rep)
-                    if "DE" == lang:
+                    if int(1) == lang:
                         target2 = np.array([[0.95]*len(cpred)]).T
                     else:
                         target2 = np.array([[0.05]*len(cpred)]).T
                     target2 = torch.FloatTensor(target2).cuda()
                     closs =  10*self.criticloss(cpred,target2)
 
-                    if self.model.critic2 is not None and True: ## didnt enter
+                    if self.model.critic2 is not None: #
                       
                         rep2 = rep2[:min(src_lengths),:,:]
                         rep2 = rep2.view(-1,512)
                         cpred2 = self.model.critic2(rep2)
-                        if "DE" == tags[-1]:
+                        if  int(1)== tags[-1]:
                             target22 = np.array([[0.95]*len(cpred2)]).T
                         else:
                             target22 = np.array([[0.05]*len(cpred2)]).T
                         target22 = torch.FloatTensor(target22).cuda()
                         closs = (closs+ 10*self.criticloss(cpred2,target22))
 
-                    if self.model.critic3 is not None and False:
-                        cpred3 = self.model.critic3(rep)
-                        if "COMP"==tags[1]:
-                            target33 = np.array([[0.9]*len(cpred3)]).T
-                        else:
-                            target33 = np.array([[0.1]*len(cpred3)]).T
-                        target33 = torch.FloatTensor(target33).cuda()
-                        closs = (closs+  self.criticloss(cpred3,target33))
-                        closs = closs/2
+            
 
 
 
 
                 else:
                     closs = None
-                    #print (tags)
-                #print (type(closs))
-
-                #print (outputs)
-                #print (attns)
-
-                # 3. Compute loss.
-  
-                #batch.tgt[1,:,:]= self.train_loss.padding_idx
-                #batch.tgt[2,:,:] = self.train_loss.padding_idx
-                #batch.tgt[3,:,:] = self.train_loss.padding_idx
-                #print ("one loss")
+         
                 loss, batch_stats = self.train_loss(
                     batch,
                     outputs,
@@ -574,15 +438,11 @@ class TrainerC(object):
                     shard_size=self.shard_size,
                     trunc_start=j,
                     trunc_size=trunc_size,criticloss=closs)
-                #batch.tgt[1,:,:] = b1
-                #batch.tgt[2,:,:] = b2
-                #print ((loss))
-                #loss = loss + closs
+     
                 if loss is not None:
                     print ("Not none")
                     self.optim.backward(loss)
-                else:
-                    pass
+
                 if closs is None:
                     total_stats.update(batch_stats,criticloss=float(0.0))
                     report_stats.update(batch_stats,criticloss=float(0.0))
@@ -606,13 +466,11 @@ class TrainerC(object):
                 # if dec_state is not None:
                 #    dec_state.detach()
 
-                if tags[-1] =="EN" and self.model.decoder2 is not None:
+                if tags[-1] ==int(2) and self.model.decoder2 is not None:
 
                     if self.model.decoder2.state is not None:
                         self.model.decoder2.detach_state()
-
                 else:
-                    assert(tags[-1]=="DE")
                     if self.model.decoder.state is not None:
                         self.model.decoder.detach_state()
 
