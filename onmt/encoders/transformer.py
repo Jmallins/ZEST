@@ -157,8 +157,9 @@ class TransformerEncoder(EncoderBase):
 
 
         out2 = out
-
+        print (ctags)
         for ii,t in enumerate(ctags):
+            print (t)
             out = self.extras[self.tags[t]](out, mask)
   
 

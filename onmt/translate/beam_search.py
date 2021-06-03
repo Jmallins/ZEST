@@ -1,4 +1,4 @@
-"""Copyright 2020 Google LLC
+"""Copyright 2020-2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -133,7 +133,7 @@ class BeamSearch(DecodeStrategy):
         return self.select_indices.view(self.batch_size, self.beam_size)\
             .fmod(self.beam_size)
 
-    def advance(self, log_probs, attn,tgt):
+    def advance(self, log_probs, attn):
         #print ()
         vocab_size = log_probs.size(-1)
         # using integer division to get an integer _B without casting
@@ -155,9 +155,6 @@ class BeamSearch(DecodeStrategy):
         log_probs += self.topk_log_probs.view(_B * self.beam_size, 1)
 
         self.block_ngram_repeats(log_probs)
-        self.force(log_probs,tgt)
-
-        self.bannedbpe(log_probs,tgt,self._batch_offset)
 
         # if the sequence ends now, then the penalty is the current
         # length + 1, to include the EOS token
@@ -178,7 +175,6 @@ class BeamSearch(DecodeStrategy):
         #print (self.topk_log_probs.shape)
         # Resolve beam origin and map to batch index flat representation.
         torch.div(self.topk_ids, vocab_size, out=self._batch_index)
-        #print (self._batch_index.shape)
 
         self._batch_index += self._beam_offset[:_B].unsqueeze(1)
         self.select_indices = self._batch_index.view(_B * self.beam_size)
@@ -302,4 +298,3 @@ class BeamSearch(DecodeStrategy):
                 if self._stepwise_cov_pen:
                     self._prev_penalty = self._prev_penalty.index_select(
                         0, non_finished)
-

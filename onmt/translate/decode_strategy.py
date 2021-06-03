@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-"""Copyright 2020 Google LLC
+"""Copyright 2020-2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ limitations under the License.
 """
 import torch
 import numpy as np
-import pyphen
 class DecodeStrategy(object):
     """Base class for generation strategies.
 
@@ -72,7 +71,7 @@ class DecodeStrategy(object):
 
     def __init__(self, pad, bos, eos, batch_size, device, parallel_paths,
                  min_length, block_ngram_repeat, exclusion_tokens,
-                 return_attention, max_length,i2w,batch,threshold,sent1,badsynf):
+                 return_attention, max_length,i2w,batch):
 
         # magic indices
         self.pad = pad
@@ -81,9 +80,6 @@ class DecodeStrategy(object):
         self.i2w = i2w
         self.batch=batch
         self.cache = {}
-        self.threshold = threshold
-        self.sent1 = -sent1
-        self.badsyn = None
         self.badparts = []
 
 

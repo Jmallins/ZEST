@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Copyright 2020 Google LLC
+"""Copyright 2020-2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -113,9 +113,13 @@ def main(opt, device_id):
     configure_process(opt, device_id)
     init_logger(opt.log_file)
     # Load checkpoint if we resume from a previous training.
-    f = open(opt.data,"rb")
-    vocab2,datas,vtags = pickle.load(f)
-    f.close()
+    import json
+    train_iters =[]
+    with open(opt.data) as json_file:
+        data = json.load(json_file)
+        vocab = data["vocab"]
+        vocab2 = vocab
+            
     if opt.train_from:
         logger.info('Loading checkpoint from %s' % opt.train_from)
         checkpoint = torch.load(opt.train_from,
@@ -139,6 +143,13 @@ def main(opt, device_id):
     else:
         fields = vocab
 
+    for key,value in data.items():
+        if key == ("vocab"):
+            continue
+        elif key.startswith("valid"):
+            valid_iter = (key.split("valid-")[1].split("-"),build_dataset_iter(value,fields, opt, is_train=False))
+        else:
+            train_iters.append((key.split("-"),build_dataset_iter(value,fields, opt)))
     # Report src and tgt vocab sizes, including for features
     for side in ['src', 'tgt']:
         f = fields[side]
@@ -185,18 +196,10 @@ def main(opt, device_id):
     trainer = build_trainer(
         opt, device_id, model, fields, optim, model_saver=model_saver)
 
-
-    train_iters =[]
-    for data in datas:
-        ttt = build_dataset_iter(data[1]+".train",fields, opt)
-        train_iters.append((data[0],ttt,data[2]))
-
-
     vocab = torch.load(vocab2)
 
 
 
-    valid_iter = (vtags,build_dataset_iter(datas[0][1]+".valid",fields, opt, is_train=False))
     #print (valid_iter is None)
     #valid_iter = valid_iter(datas[0][0],valid_iter)
     if len(opt.gpu_ranks):

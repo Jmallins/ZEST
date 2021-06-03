@@ -1,4 +1,4 @@
-"""Copyright 2020 Google LLC
+"""Copyright 2020-2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -215,11 +215,7 @@ class TrainerC(object):
 
 
         import random 
-        sizes = [xxx[1].size * xxx[2] for xxx in  train_iters]
-        tsize = sum(sizes)
-        sizes = [xxx/tsize for xxx in  sizes]
-
-        bns = [(xxx[0],self._accum_batches(xxx[1]),xxx[2]) for xxx in  train_iters]
+        bns = [(xxx[0],self._accum_batches(xxx[1])) for xxx in  train_iters]
         i = -1
         step = -1
         #print (train_steps)
@@ -230,26 +226,13 @@ class TrainerC(object):
             
 
             
-            for jjj,(tags,bn,skip) in enumerate(bns):
+            for jjj,(tags,bn) in enumerate(bns):
   
                 report_stats = report_statsS[jjj]
                 total_stats = total_statsS[jjj]
                 randomint = random.uniform(0,1)
-
-                if  True and step < 2  and  not ("DE" in tags and "EN" in tags): # 
-                    #skip=-1
-                    continue
-
-                if "LM" in tags:
-                    skip = max(0.02,1- (1*(0.65+6*(float(1.0/report_stats.ppl())))))
-                else:
-                    if "TRANS" in tags and  not("DE" in tags and "EN" in tags):
-                        skip = max(0.04,1- (max(1,6-(step/20000))*(0+float(1.0/report_stats.ppl()))))
-                    else:
-                        skip = max(0.04,1- (max(1,6-(step/20000))*(0+float(1.0/report_stats.ppl()))))
-        
+                skip = 1- (float(1.0/report_stats.ppl()))
                 if randomint > skip:
-
                     pass
                 else:
                 
@@ -260,18 +243,12 @@ class TrainerC(object):
                    
 
                     step = self.optim.training_step
-                    #self.model.critic.lambda_= min(1,step/200000)
                     p =min(1,(step-100)/220000)
-
-             
-
                     sl  = max(0, 2. / (1. + np.exp(-10. * p)) - 1)
                     self.model.critic.lambda_=sl
 
                     if self.model.critic2 is not None:
                         self.model.critic2.lambda_= sl
-                    if self.model.critic3 is not None:
-                        self.model.critic3.lambda_= sl
 
                     if self.gpu_verbose_level > 1:
                         logger.info("GpuRank %d: index: %d", self.gpu_rank, i)
@@ -285,12 +262,9 @@ class TrainerC(object):
                                             .all_gather_list
                                             (normalization))
            
-
-        
-                    #print ("gradf")
                     self._gradient_accumulation(
                         batches, normalization, total_stats,
-                        report_stats,ntags,freezeit)
+                        report_stats,ntags)
 
                     if self.average_decay > 0 and i % self.average_every == 0:
                         self._update_average(step)
@@ -378,7 +352,7 @@ class TrainerC(object):
         return stats
 
     def _gradient_accumulation(self, true_batches, normalization, total_stats,
-                               report_stats,tags,freezeit):
+                               report_stats,tags,freezeit=False):
         if self.grad_accum_count > 1:
             self.optim.zero_grad()
 
@@ -410,37 +384,29 @@ class TrainerC(object):
                 outputs, attns,rep,rep2 = self.model(src, tgt, src_lengths, tags=tags,nograd=freezeit,bptt=bptt,dumpenc=True)
                 bptt = True
 
-                if  True:
                  
-                    rep = rep[:min(src_lengths),:,:] 
-                    rep = rep.view(-1,512)
-                    cpred = self.model.critic(rep)
-                    if int(1) == lang:
-                        target2 = np.array([[0.95]*len(cpred)]).T
-                    else:
-                        target2 = np.array([[0.05]*len(cpred)]).T
-                    target2 = torch.FloatTensor(target2).cuda()
-                    closs =  10*self.criticloss(cpred,target2)
-
-                    if self.model.critic2 is not None: #
-                      
-                        rep2 = rep2[:min(src_lengths),:,:]
-                        rep2 = rep2.view(-1,512)
-                        cpred2 = self.model.critic2(rep2)
-                        if  int(1)== tags[-1]:
-                            target22 = np.array([[0.95]*len(cpred2)]).T
-                        else:
-                            target22 = np.array([[0.05]*len(cpred2)]).T
-                        target22 = torch.FloatTensor(target22).cuda()
-                        closs = (closs+ 10*self.criticloss(cpred2,target22))
-
-            
-
-
-
-
+                rep = rep[:min(src_lengths),:,:] 
+                rep = rep.view(-1,512)
+                cpred = self.model.critic(rep)
+                if int(1) == lang:
+                    target2 = np.array([[0.95]*len(cpred)]).T
                 else:
-                    closs = None
+                    target2 = np.array([[0.05]*len(cpred)]).T
+                target2 = torch.FloatTensor(target2).cuda()
+                closs =  10*self.criticloss(cpred,target2)
+
+                if self.model.critic2 is not None:
+                      
+                rep2 = rep2[:min(src_lengths),:,:]
+                rep2 = rep2.view(-1,512)
+                cpred2 = self.model.critic2(rep2)
+                if  int(1)== tags[-1]:
+                    target22 = np.array([[0.95]*len(cpred2)]).T
+                else:
+                    target22 = np.array([[0.05]*len(cpred2)]).T
+                    target22 = torch.FloatTensor(target22).cuda()
+                closs = (closs+ 10*self.criticloss(cpred2,target22))
+
          
                 loss, batch_stats = self.train_loss(
                     batch,
@@ -472,11 +438,6 @@ class TrainerC(object):
                         onmt.utils.distributed.all_reduce_and_rescale_tensors(
                             grads, float(1))
                     self.optim.step()
-
-                # If truncated, don't backprop fully.
-                # TO CHECK
-                # if dec_state is not None:
-                #    dec_state.detach()
 
                 if tags[-1] ==int(2) and self.model.decoder2 is not None:
 
