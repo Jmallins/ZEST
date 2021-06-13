@@ -2,8 +2,6 @@
 
 This repo contains the code used within the paper [Zero-Shot Crosslingual Sentence Simplification](http://link.to.come.later)
 
-Better code and documentation coming soon!
-
 
 For the test data and GeoLino dataset see https://github.com/Jmallins/ZEST-data
 
