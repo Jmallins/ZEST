@@ -1,3 +1,4 @@
+from __future__ import print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,6 @@ limitations under the License.
 """
 
 """ Implementation of all available options """
-from __future__ import print_function
 
 import configargparse
 from onmt.models.sru import CheckSRU

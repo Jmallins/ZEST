@@ -1,3 +1,5 @@
+from __future__ import division
+
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +19,7 @@ limitations under the License.
 This includes: LossComputeBase and the standard NMTLossCompute, and
                sharded loss compute stuff.
 """
-from __future__ import division
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

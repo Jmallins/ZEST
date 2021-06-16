@@ -210,8 +210,7 @@ class TrainerC(object):
         if self.n_gpu > 1:
             assert(False)
         if self.n_gpu > 1:
-            train_iter = itertools.islice(
-                train_iter, self.gpu_rank, None, self.n_gpu)
+            train_iter = itertools.islice(train_iters, self.gpu_rank, None, self.n_gpu)
 
 
         import random 
@@ -397,17 +396,16 @@ class TrainerC(object):
 
                 if self.model.critic2 is not None:
                       
-                rep2 = rep2[:min(src_lengths),:,:]
-                rep2 = rep2.view(-1,512)
-                cpred2 = self.model.critic2(rep2)
-                if  int(1)== tags[-1]:
-                    target22 = np.array([[0.95]*len(cpred2)]).T
-                else:
-                    target22 = np.array([[0.05]*len(cpred2)]).T
-                    target22 = torch.FloatTensor(target22).cuda()
-                closs = (closs+ 10*self.criticloss(cpred2,target22))
+                    rep2 = rep2[:min(src_lengths),:,:]
+                    rep2 = rep2.view(-1,512)
+                    cpred2 = self.model.critic2(rep2)
+                    if  int(1)== tags[-1]:
+                        target22 = np.array([[0.95]*len(cpred2)]).T
+                    else:
+                        target22 = np.array([[0.05]*len(cpred2)]).T
+                        target22 = torch.FloatTensor(target22).cuda()
+                    closs = (closs+ 10*self.criticloss(cpred2,target22))
 
-         
                 loss, batch_stats = self.train_loss(
                     batch,
                     outputs,

@@ -1,3 +1,4 @@
+from __future__ import print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +16,7 @@ limitations under the License.
 
 
 """ Report manager utility """
-from __future__ import print_function
+
 import time
 from datetime import datetime
 
