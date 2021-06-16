@@ -1,0 +1,5 @@
+{
+      "EN-TRANS-COMP-DE": "data/demo.train.0",
+      "vocab":"data/zest_vocab.vocab.pt",
+      "valid-DE-TRANS-COMP-DE":"data/demo.train.0"
+    }
