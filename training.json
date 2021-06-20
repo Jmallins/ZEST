@@ -1,5 +1,15 @@
 {
-      "EN-TRANS-COMP-DE": "data/demo.train.0",
-      "vocab":"data/zest_vocab.vocab.pt",
-      "valid-DE-TRANS-COMP-DE":"data/demo.train.0"
-    }
+  "EN-TRANS-COMP-DE": "data/EN-TRANS-COMP-DE.train.0",
+  "DE-TRANS-COMP-EN": "data/DE-TRANS-COMP-EN.train.0",
+  "EN-TRANS-COMP-EN": "data/EN-TRANS-COMP-EN.train.0",
+  "EN-TRANS-SIMP-EN": "data/EN-TRANS-SIMP-EN.train.0",
+  "DE-TRANS-COMP-DE": "data/DE-TRANS-COMP-DE.train.0",
+  "DE-TRANS-SIMP-DE": "data/DE-TRANS-SIMP-DE.train.0",
+  "EN-LM-COMP-EN": "data/EN-LM-COMP-EN.train.0",
+  "EN-LM-SIMP-EN": "data/EN-LM-SIMP-EN.train.0",
+  "DE-LM-COMP-DE": "data/DE-LM-COMP-DE.train.0",
+  "DE-LM-SIMP-DE": "data/DE-LM-SIMP-DE.train.0",
+  "EN-SIMPLY-SIMP-EN": "data/EN-SIMPLY-SIMP-EN.train.0",
+  "vocab":"data/zest.vocab.pt",
+  "valid-DE-SIMPLY-SIMP-DE":"data/valid-DE-SIMPLY-SIMP-DE.train.0"
+}
