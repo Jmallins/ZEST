@@ -44,7 +44,7 @@ Third, create a json file that lists all of the training files and the source la
 }
 
 ```
-Being Source language, task+, domain, output language.
+Being Source language, task+, domain, output language. Note, for the paper we did not use ParaCrawl from WMT19.
 
 ##  Training
 
