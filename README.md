@@ -18,7 +18,7 @@ First, create the vocab file (from English and German), all files should already
 python preprocess.py -train_src X --train_tgt Y --share_vocab True --save_data some_dir/the_vocab
 ```
 
-Second, create the training file per task/domain/source_language/target_language. All files should already be split into sentence pieces and ideally they should have the same tokenization (mosses tokenziation/detokenization could be used), noise can also be applied before using preprocess.
+Second, create the training file per task/domain/source_language/target_language. All files should already be split into sentence pieces and ideally they should have the same tokenization (mosses tokenziation/detokenization could be used, wikilarge comes pre-tokenized), noise can also be applied before using preprocess.
 ```
 python preprocess.py -train_src data/src-train.txt -train_tgt data/tgt-train.txt  -save_data data/demo --src_vocab some_dir/the_vocab --tgt_vocab some_dir/the_vocab 
 ```
