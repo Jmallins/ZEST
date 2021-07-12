@@ -297,7 +297,6 @@ class TrainerC(object):
                                     % (self.gpu_rank, step))
                     self._report_step(self.optim.learning_rate(),
                                       step, valid_stats=valid_stats)
-                print 
                 if (self.model_saver is not None
                     and (save_checkpoint_steps != 0
                          and step % save_checkpoint_steps == 0)):
