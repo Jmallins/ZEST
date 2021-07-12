@@ -53,7 +53,7 @@ To train a model
 python  train.py -data  some_dir\something.json  -layers 6 -rnn_size 512 -word_vec_size 512 -transformer_ff 2048 -heads 12         -encoder_type transformer -decoder_type transformer -position_encoding         -train_steps 250000  -max_generator_batches 2 -dropout 0.1         -batch_size 4096 -batch_type tokens -normalization tokens  -accum_count 1         -optim adam -adam_beta2 0.998 -decay_method noam -warmup_steps 8000 -learning_rate 2         -max_grad_norm 0 -param_init 0  -param_init_glorot         -label_smoothing 0.1 -valid_steps 1000 -save_checkpoint_steps 1000 --share_embeddings
 ```
 
-Where some_dir/data.json is the json file created previously. Note, this could take over a week to train (on a tesla-p100), so its worth checking everything is correct (there is nothing worse than waiting a week for the data to be wrong, trust me). Checkpoints are saved regularly so check they do something sensible. 
+Where some_dir/data.json is the json file created previously. Note, this could take over a week to train (on a tesla-p100), so its worth checking everything is correct (there is nothing worse than waiting a week for the data to be wrong, trust me). Checkpoints are saved regularly so check they do something sensible. If you wish to train for a short time you should change the two hardcoded values in (220000) onmt/trainerC.py to the numebr of steps you choose.
 
 ## Predicition 
 ```
