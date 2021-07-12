@@ -231,7 +231,10 @@ class TrainerC(object):
                 report_stats = report_statsS[jjj]
                 total_stats = total_statsS[jjj]
                 randomint = random.uniform(0,1)
-                skip = 1- (float(1.0/report_stats.ppl()))
+                skip = 1- ((float(1.0/report_stats.ppl()))* ((step/220000)))
+                # Warm up
+                if step <( 220000 * 0.1) and not ("EN" in tags and "DE" in tags):
+                    skip = 1
                 if randomint > skip:
                     pass
                 else:
