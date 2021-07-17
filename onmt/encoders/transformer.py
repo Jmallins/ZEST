@@ -111,7 +111,7 @@ class TransformerEncoder(EncoderBase):
         self.num_layers = num_layers
 
     
-        self.tags = {"TRANS":0,"LM":1,"SIMPLY":2,"EN":3,"DE":4,"SIMP":5,"COMP":6}
+        self.tags = {"TRANS":0,"LM":1,"SIMPLY":2,"EN":3,"SI":4,"SIMP":5,"COMP":6}
         self.extras = nn.ModuleList()
         for tag in self.tags:
         	self.extras.append(TransformerEncoderLayer(

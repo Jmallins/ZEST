@@ -634,7 +634,7 @@ class Translator(object):
         batch_size = batch.batch_size
         tags = self.ctags 
 
-        if tags[-1] =="EN" or tags[-1]=="DE":
+        if tags[-1] =="EN" or tags[-1]=="SI":
             lang = tags[-1]
             tags = tags[:-1]
         else:
