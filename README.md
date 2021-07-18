@@ -44,7 +44,7 @@ Third, create a json file that lists all of the training files and the source la
 }
 
 ```
-Being Source language, task+, domain, output language. A layer (apart from languages) can be applied multiple times by including it multiple times in the key. 
+Being Source language, task+, domain, output language. A layer (apart from languages) can be applied multiple times by including it multiple times in the key.  If you have simplification data in German it can also be included. Note, we use DE/EN but these are not language specific and any two languages could be used. 
 ##  Training
 
 To train a model 
