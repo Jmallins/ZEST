@@ -58,7 +58,7 @@ Where some_dir/data.json is the json file created previously. Note, this could t
 ```
 python translate.py --length_penalty avg --beam_size 10  --replace_unk --dynamic_dict --share_vocab  --gpu 0 --model model_location.pt  -v --threshold 0 --ctags SIMPLY-SIMPLY-SIMPY-SIMP-DE  --batch_size 20  --max_length 128 --src input_file --output output_location 
 ```
-Note, any combination of layers can be provided. 
+Note, any combination of layers can be provided.  Also, please remember to do checkpoint selection. If you notice your outputs are not simple enough you can apply the simplification layer multiple times to increase the simplicity. 
 
 ## Notes and Regrets 
 
