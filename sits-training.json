@@ -10,6 +10,6 @@
     "SI-LM-COMP-SI": "data/SI-LM-COMP-SI.train.0",
     "SI-LM-SIMP-SI": "data/SI-LM-SIMP-SI.train.0",
     "EN-SIMPLY-SIMP-EN": "data/EN-SIMPLY-SIMP-EN.train.0",
-    "vocab":"data/sist.vocab.pt",
+    "vocab":"data/sits.vocab.pt",
     "valid-SI-SIMPLY-SIMP-SI":"data/valid-SI-SIMPLY-SIMP-SI.train.0"
   }
