@@ -74,7 +74,7 @@ def build_trainer(opt, device_id, model, fields, optim, model_saver=None):
                            model_saver=model_saver if gpu_rank == 0 else None,
                            average_decay=average_decay,
                            average_every=average_every,
-                           model_dtype=opt.model_dtype,shuffletags=opt.shuffletags)
+                           model_dtype=opt.model_dtype,shuffletags=opt.shuffletags,warm_up = opt.warm_up, cool_down = opt.cool_down,lm_boost=opt.lm_boost)
     return trainer
 
 
@@ -107,7 +107,7 @@ class TrainerC(object):
                  trunc_size=0, shard_size=32,
                  norm_method="sents", grad_accum_count=1, n_gpu=1, gpu_rank=1,
                  gpu_verbose_level=0, report_manager=None, model_saver=None,
-                 average_decay=0, average_every=1, model_dtype='fp32',shuffletags=False):
+                 average_decay=0, average_every=1, model_dtype='fp32',shuffletags=False,warm_up = 0, cool_down = None,lm_boost=0):
         # Basic attributes.
         self.model = model
         self.train_loss = train_loss
@@ -127,6 +127,9 @@ class TrainerC(object):
         self.average_every = average_every
         self.model_dtype = model_dtype#
         self.shuffletags =  shuffletags
+        self.warm_up = warm_up
+        self.cool_down = cool_down
+        self.lm_boost = lm_boost
 
         assert grad_accum_count > 0
         if grad_accum_count > 1:
@@ -231,11 +234,16 @@ class TrainerC(object):
                 report_stats = report_statsS[jjj]
                 total_stats = total_statsS[jjj]
                 randomint = random.uniform(0,1)
-                skip = 1- ((float(1.0/report_stats.ppl()))* ((step/220000)))
+                lm_boost = 0 
+                if "LM" in tags:
+                    lm_boost = self.lm_boost
+                skip = 1- ((float(1.0/report_stats.ppl())))
+                skip+= lm_boost
+                skip = min(0.975,skip)
                 # Warm up
-                if step <( 220000 * 0.1) and not ("EN" in tags and "DE" in tags):
+                if step < self.warm_up and not ("EN" in tags and "DE" in tags):
                     skip = 1
-                if randomint > skip:
+                if randomint > skip and (self.cool_down is None or step < self.cool_down):
                     pass
                 else:
                 
@@ -394,22 +402,23 @@ class TrainerC(object):
                     target2 = np.array([[0.95]*len(cpred)]).T
                 else:
                     target2 = np.array([[0.05]*len(cpred)]).T
-                target2 = torch.FloatTensor(target2).cuda()
+                target2 = torch.FloatTensor(target2)#.cuda()
                 closs =  10*self.criticloss(cpred,target2)
 
                 if self.model.critic2 is not None:
-                      
-                rep2 = rep2[:min(src_lengths),:,:]
-                rep2 = rep2.view(-1,512)
-                cpred2 = self.model.critic2(rep2)
-                if  int(1)== tags[-1]:
-                    target22 = np.array([[0.95]*len(cpred2)]).T
-                else:
-                    target22 = np.array([[0.05]*len(cpred2)]).T
-                    target22 = torch.FloatTensor(target22).cuda()
-                closs = (closs+ 10*self.criticloss(cpred2,target22))
+                          
+                    rep2 = rep2[:min(src_lengths),:,:]
+                    rep2 = rep2.view(-1,512)
+                    cpred2 = self.model.critic2(rep2)
+                    if  int(1)== tags[-1]:
+                        target22 = np.array([[0.95]*len(cpred2)]).T
+                    else:
+                        target22 = np.array([[0.05]*len(cpred2)]).T
+                        target22 = torch.FloatTensor(target22)#.cuda()
+                    closs = (closs+ 10*self.criticloss(cpred2,target22))
 
-         
+                if "LM" in tags:
+                    closs = 0
                 loss, batch_stats = self.train_loss(
                     batch,
                     outputs,

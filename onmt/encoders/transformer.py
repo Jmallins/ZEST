@@ -1,4 +1,4 @@
-"""Copyright 2020 Google LLC
+"""Copyright 2020-2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -111,7 +111,7 @@ class TransformerEncoder(EncoderBase):
         self.num_layers = num_layers
 
     
-        self.tags = {"TRANS":0,"LM":1,"SIMPLY":2,"EN":3,"DE":4,"SIMP":5,"COMP":6}
+        self.tags = {"TRANS":0,"LM":1,"SIMPLY":2,"SIMP":3,"COMP":4}
         self.extras = nn.ModuleList()
         for tag in self.tags:
         	self.extras.append(TransformerEncoderLayer(
@@ -158,9 +158,9 @@ class TransformerEncoder(EncoderBase):
 
         out2 = out
         print (ctags)
-        for ii,t in enumerate(ctags):
-            print (t)
-            out = self.extras[self.tags[t]](out, mask)
+        for ii,tag in enumerate(ctags):
+            if tag in self.tags:
+                    out = self.extras[self.tags[tag]](out, mask)
   
 
 

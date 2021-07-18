@@ -1,3 +1,6 @@
+#Copyright 2021 Google LLC
+from __future__ import division
+
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +18,6 @@ limitations under the License.
 
 
 """ Statistics calculation utility """
-from __future__ import division
 import time
 import math
 import sys

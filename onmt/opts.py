@@ -1,3 +1,5 @@
+# Copyright 2021 Google LLC
+from __future__ import print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +16,6 @@ limitations under the License.
 """
 
 """ Implementation of all available options """
-from __future__ import print_function
 
 import configargparse
 from onmt.models.sru import CheckSRU
@@ -338,7 +339,14 @@ def train_opts(parser):
               help='Path prefix to the ".train.pt" and '
                    '".valid.pt" file path from preprocess.py',default=False)
 
+    group.add('--warm_up', '-warm_up', type=int, default=0,
+              help="The number of steps just to train on translation data.")
+    group.add('--cool_down', '-cool_down', type=int, default=None,
+              help="After this number of steps the model will train on all tasks equally.")
+    group.add('--lm_boost', '-lm-boost', type=float, default=0,
+              help="Since the LM task will always have a lower peplexity, it will be trained on a disproportionate amount. As such we penalize its selection. 0 no penalty, 1 it will never be chosen. ")
 
+    
 
     group.add('--save_model', '-save_model', default='model',
               help="Model filename (the model will be saved as "

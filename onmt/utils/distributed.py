@@ -1,3 +1,5 @@
+#Copyright 2021 Google LLC
+from __future__ import print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +22,6 @@ limitations under the License.
 """
 
 
-from __future__ import print_function
 
 import math
 import pickle

@@ -1,0 +1,15 @@
+{
+  "EN-TRANS-COMP-DE": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "DE-TRANS-COMP-EN": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "EN-TRANS-COMP-EN": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "EN-TRANS-SIMP-EN": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "DE-TRANS-COMP-DE": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "DE-TRANS-SIMP-DE":"C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "EN-LM-COMP-EN": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "EN-LM-SIMP-EN": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "DE-LM-COMP-DE": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "DE-LM-SIMP-DE": "C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "EN-SIMPLY-SIMPLY-SIMP-EN":"C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train",
+  "vocab":"C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.vocab.pt",
+  "valid-DE-SIMPLY-SIMPLY-SIMPLY-SIMP-DE":"C:\\Users\\jonathan\\Documents\\GitHub\\ZEST\\example\\data\\.train"
+}
