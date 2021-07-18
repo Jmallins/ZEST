@@ -56,9 +56,10 @@ Where some_dir/data.json is the json file created previously. Note, this could t
 
 ## Predicition 
 ```
-python translate.py --length_penalty avg --beam_size 30  --replace_unk --dynamic_dict --share_vocab  --gpu 0 --model model_location.pt  -v --threshold 0 --ctags SIMPLY-SIMPLY-SIMPY-SIMP-DE  --batch_size 20  --max_length 128 --src input_file --output output_location 
+python translate.py --length_penalty avg --beam_size 10  --replace_unk --dynamic_dict --share_vocab  --gpu 0 --model model_location.pt  -v --threshold 0 --ctags SIMPLY-SIMPLY-SIMPY-SIMP-DE  --batch_size 20  --max_length 128 --src input_file --output output_location 
 ```
-```
+Note, any combination of layers can be provided. 
+
 ## Notes and Regrets 
 
 * We detokenized wikilarge with the joshua detokenization script
