@@ -69,3 +69,4 @@ Note, any combination of layers can be provided.
 * We upsampled all data ~1M examples, and applied different sentencepieces sampling and source word dropout.
 * We learnt sentencepieces, truecasing, and vocab on all data. This is very timely and instead these could probably be learnt only on the translation data. 
 * For the paper we did not use ParaCrawl from WMT19.
+* Regret, the validation set (or some of it) could have been used as training source. 
