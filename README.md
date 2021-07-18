@@ -66,7 +66,7 @@ Note, any combination of layers can be provided.
 * We applied tokenization, truecasing and sentencepieces. If I was to do it again I would just apply sentencepieces.
 * We sampled different sentencepieces for the source the target when autoencoding.
 * We applied source word dropout before applying sentencepieces.
-* We upsampled all data ~1M examples, and applied different sentencepieces sampling and source word dropout.
+* We upsampled all data to ~1M examples, and applied different sentencepieces sampling and source word dropout.
 * We learnt sentencepieces, truecasing, and vocab on all data. This is very timely and instead these could probably be learnt only on the translation data. 
 * For the paper we did not use ParaCrawl from WMT19.
 * Regret, the validation set (or some of it) could have been used as training source. 
