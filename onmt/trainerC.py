@@ -218,7 +218,6 @@ class TrainerC(object):
         bns = [(xxx[0],self._accum_batches(xxx[1])) for xxx in  train_iters]
         i = -1
         step = -1
-        #print (train_steps)
         layeronly = 1
         seenstep = set()
         while not (train_steps > 0 and step >= train_steps):
@@ -294,14 +293,11 @@ class TrainerC(object):
                                     % (self.gpu_rank, step))
                     self._report_step(self.optim.learning_rate(),
                                       step, valid_stats=valid_stats)
-                print 
                 if (self.model_saver is not None
                     and (save_checkpoint_steps != 0
                          and step % save_checkpoint_steps == 0)):
 
                     self.model_saver.save(step, moving_average=self.moving_average)
-
-        #print (step)
 
         if self.model_saver is not None:
             logger.info("Saving model after training ---------------------")
@@ -418,7 +414,6 @@ class TrainerC(object):
                     trunc_size=trunc_size,criticloss=closs)
      
                 if loss is not None:
-                    print ("Not none")
                     self.optim.backward(loss)
 
                 if closs is None:
