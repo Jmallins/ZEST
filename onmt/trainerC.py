@@ -71,7 +71,8 @@ def build_trainer(opt, device_id, model, fields, optim, model_saver=None):
                            shard_size, norm_method,
                            grad_accum_count, n_gpu, gpu_rank,
                            gpu_verbose_level, report_manager,
-                           model_saver=model_saver if gpu_rank == 0 else None,
+                           model_saver=model_saver, 
+                        # if gpu_rank == 0 else None,
                            average_decay=average_decay,
                            average_every=average_every,
                            model_dtype=opt.model_dtype,shuffletags=opt.shuffletags)
@@ -303,6 +304,7 @@ class TrainerC(object):
         #print (step)
 
         if self.model_saver is not None:
+            logger.info("Saving model after training ---------------------")
             self.model_saver.save(step, moving_average=self.moving_average)
         return total_stats
 
