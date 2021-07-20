@@ -1,8 +1,9 @@
+from __future__ import unicode_literals
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #Copyright 2020 Google LLC.
 #SPDX-License-Identifier: Apache-2.0
-from __future__ import unicode_literals
+
 from itertools import repeat
 
 from onmt.utils.logging import init_logger
