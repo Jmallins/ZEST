@@ -1,4 +1,3 @@
-# Copyright 2021 Google LLC
 from __future__ import print_function
 """Copyright 2021 Google LLC
 

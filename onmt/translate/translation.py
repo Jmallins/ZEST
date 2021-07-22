@@ -1,3 +1,4 @@
+from __future__ import unicode_literals, print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,7 @@ limitations under the License.
 """
 
 """ Translation main class """
-from __future__ import unicode_literals, print_function
+
 
 import torch
 from onmt.inputters.text_dataset import TextMultiField

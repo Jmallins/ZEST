@@ -71,7 +71,8 @@ def build_trainer(opt, device_id, model, fields, optim, model_saver=None):
                            shard_size, norm_method,
                            grad_accum_count, n_gpu, gpu_rank,
                            gpu_verbose_level, report_manager,
-                           model_saver=model_saver if gpu_rank == 0 else None,
+                           model_saver=model_saver, 
+                        # if gpu_rank == 0 else None,
                            average_decay=average_decay,
                            average_every=average_every,
                            model_dtype=opt.model_dtype,shuffletags=opt.shuffletags,warm_up = opt.warm_up, cool_down = opt.cool_down,lm_boost=opt.lm_boost)
@@ -213,15 +214,13 @@ class TrainerC(object):
         if self.n_gpu > 1:
             assert(False)
         if self.n_gpu > 1:
-            train_iter = itertools.islice(
-                train_iter, self.gpu_rank, None, self.n_gpu)
+            train_iter = itertools.islice(train_iters, self.gpu_rank, None, self.n_gpu)
 
 
         import random 
         bns = [(xxx[0],self._accum_batches(xxx[1])) for xxx in  train_iters]
         i = -1
         step = -1
-        #print (train_steps)
         layeronly = 1
         seenstep = set()
         while not (train_steps > 0 and step >= train_steps):
@@ -311,9 +310,8 @@ class TrainerC(object):
 
                     self.model_saver.save(step, moving_average=self.moving_average)
 
-        #print (step)
-
         if self.model_saver is not None:
+            logger.info("Saving model after training ---------------------")
             self.model_saver.save(step, moving_average=self.moving_average)
         return total_stats
 
@@ -429,7 +427,6 @@ class TrainerC(object):
                     trunc_size=trunc_size,criticloss=closs)
      
                 if loss is not None:
-                    print ("Not none")
                     self.optim.backward(loss)
 
                 if closs is None:

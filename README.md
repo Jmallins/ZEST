@@ -28,19 +28,19 @@ Third, create a json file that lists all of the training files and the source la
 ```
 {
 "SOURCE_language-TASK-DOMAIN-TARGET_LANGUAGE":"file_location.train",
-  "EN-TRANS-COMP-DE": "file_location.train",
-  "DE-TRANS-COMP-EN": "file_location.train",
+  "EN-TRANS-COMP-SI": "file_location.train",
+  "SI-TRANS-COMP-EN": "file_location.train",
   "EN-TRANS-COMP-EN": "file_location.train",
   "EN-TRANS-SIMP-EN": "file_location.train",
-  "DE-TRANS-COMP-DE": "file_location.train",
-  "DE-TRANS-SIMP-DE": "file_location.train",
+  "SI-TRANS-COMP-SI": "file_location.train",
+  "SI-TRANS-SIMP-SI": "file_location.train",
   "EN-LM-COMP-EN": "file_location.train",
   "EN-LM-SIMP-EN": "file_location.train",
-  "DE-LM-COMP-DE": "file_location.train",
-  "DE-LM-SIMP-DE": "file_location.train",
+  "SI-LM-COMP-SI": "file_location.train",
+  "SI-LM-SIMP-SI": "file_location.train",
   "EN-SIMPLY-SIMPLY-SIMP-EN":"file_location.train",
-  "vocab":"file_location",
-  "valid-DE-SIMPLY-SIMPLY-SIMPLY-SIMP-DE":"file_location.train"
+  "vocab":"file_location"
+  "valid-SI-SIMPLY-SIMPLY-SIMPLY-SIMP-SI":"file_location.train"
 }
 
 ```
@@ -56,7 +56,8 @@ Where some_dir/data.json is the json file created previously. Note, this could t
 
 ## Predicition 
 ```
-python translate.py --length_penalty avg --beam_size 10  --replace_unk --dynamic_dict --share_vocab  --gpu 0 --model model_location.pt  -v --threshold 0 --ctags SIMPLY-SIMPLY-SIMPY-SIMP-DE  --batch_size 20  --max_length 128 --src input_file --output output_location 
+python translate.py --length_penalty avg --beam_size 30  --replace_unk --dynamic_dict --share_vocab  --gpu 0 --model model_location.pt  -v --threshold 0 --ctags SIMPLY-SIMPLY-SIMPY-SIMP-SI  --batch_size 20  --max_length 128 --src input_file --output output_location 
+```
 ```
 Note, any combination of layers can be provided.  Also, please remember to do checkpoint selection. If you notice your outputs are not simple enough you can apply the simplification layer multiple times to increase the simplicity. 
 

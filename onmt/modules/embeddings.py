@@ -111,10 +111,10 @@ class Embeddings(nn.Module):
 
 
 
-        print (word_padding_idx)
-        print (feat_padding_idx)
-        print (feat_vocab_sizes)
-        print (feat_vec_size)
+        # print (word_padding_idx)
+        # print (feat_padding_idx)
+        # print (feat_vocab_sizes)
+        # print (feat_vec_size)
         #assert(False)
         if len(feat_vocab_sizes) ==2:
             feat_padding_idx =feat_padding_idx[:-1]

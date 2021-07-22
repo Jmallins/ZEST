@@ -1,5 +1,5 @@
-#Copyright 2021 Google LLC
 from __future__ import division
+
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");

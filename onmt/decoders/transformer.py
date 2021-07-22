@@ -176,7 +176,6 @@ class TransformerDecoder(DecoderBase):
             _recursive_map(self.state["cache"])
 
     def detach_state(self):
-        #print (self.state)
         self.state["src"] = self.state["src"].detach()
 
     def forward(self, tgt, memory_bank, step=None, **kwargs):

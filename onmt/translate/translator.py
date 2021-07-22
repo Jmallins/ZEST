@@ -1,3 +1,4 @@
+from __future__ import print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +16,7 @@ limitations under the License.
 
 #!/usr/bin/env python
 """ Translator Class and builder """
-from __future__ import print_function
+
 import codecs
 import os
 import math
@@ -634,7 +635,7 @@ class Translator(object):
         batch_size = batch.batch_size
         tags = self.ctags 
 
-        if tags[-1] =="EN" or tags[-1]=="DE":
+        if tags[-1] =="EN" or tags[-1]=="SI":
             lang = tags[-1]
             tags = tags[:-1]
         else:

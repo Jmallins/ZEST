@@ -1,0 +1,15 @@
+{
+  "EN-TRANS-COMP-SI": "data/EN-TRANS-COMP-SI.train.0",
+  "SI-TRANS-COMP-EN": "data/SI-TRANS-COMP-EN.train.0",
+  "EN-TRANS-COMP-EN": "data/EN-TRANS-COMP-EN.train.0",
+  "EN-TRANS-SIMP-EN": "data/EN-TRANS-SIMP-EN.train.0",
+  "SI-TRANS-COMP-SI": "data/SI-TRANS-COMP-SI.train.0",
+  "SI-TRANS-SIMP-SI": "data/SI-TRANS-SIMP-SI.train.0",
+  "EN-LM-COMP-EN": "data/EN-LM-COMP-EN.train.0",
+  "EN-LM-SIMP-EN": "data/EN-LM-SIMP-EN.train.0",
+  "SI-LM-COMP-SI": "data/SI-LM-COMP-SI.train.0",
+  "SI-LM-SIMP-SI": "data/SI-LM-SIMP-SI.train.0",
+  "EN-SIMPLY-SIMP-EN": "data/EN-SIMPLY-SIMP-EN.train.0",
+  "vocab":"data/zest.vocab.pt",
+  "valid-SI-SIMPLY-SIMP-SI":"data/valid-SI-SIMPLY-SIMP-SI.train.0"
+}

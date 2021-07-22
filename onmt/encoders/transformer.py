@@ -110,7 +110,6 @@ class TransformerEncoder(EncoderBase):
         self.layer_norm = nn.LayerNorm(d_model, eps=1e-6)
         self.num_layers = num_layers
 
-    
         self.tags = {"TRANS":0,"LM":1,"SIMPLY":2,"SIMP":3,"COMP":4}
         self.extras = nn.ModuleList()
         for tag in self.tags:
@@ -161,14 +160,6 @@ class TransformerEncoder(EncoderBase):
         for ii,tag in enumerate(ctags):
             if tag in self.tags:
                     out = self.extras[self.tags[tag]](out, mask)
-  
-
-
-
-
+                    
         out = self.layer_norm(out)
-
-        return emb, out.transpose(0, 1).contiguous(), lengths,out2.transpose(0, 1).contiguous() 
-
-
-
+        return emb, out.transpose(0, 1).contiguous(), lengths,out2.transpose(0, 1).contiguous()
