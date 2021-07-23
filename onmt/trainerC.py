@@ -386,7 +386,6 @@ class TrainerC(object):
                 # 1. Create truncated target.
                 tgt = tgt_outer[j: j + trunc_size]
                 lang = tags[-1]
-                tags =tags[:-1]
                 print("Lang in ctags - ",lang)
                 print("Other tags in ctags - ",tags)
                 if self.grad_accum_count == 1:
