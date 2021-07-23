@@ -575,7 +575,7 @@ class Translator(object):
         # in case of inference tgt_len = 1, batch = beam times batch_size
         # in case of Gold Scoring tgt_len = actual length, batch = 1 batch
 
-        if self.ctags=="EN" and False :
+        if self.ctags=="EN":
             dec_out, dec_attn = self.model.decoder2(
             decoder_in, memory_bank, memory_lengths=memory_lengths, step=step
             )
@@ -637,6 +637,7 @@ class Translator(object):
 
         if tags[-1] =="EN" or tags[-1]=="SI":
             lang = tags[-1]
+            print('LG - ',lang)
             tags = tags[:-1]
         else:
             lang =None
@@ -716,7 +717,6 @@ class Translator(object):
             memory_lengths=memory_lengths,i2w=self._tgt_vocab.itos,batch=batch)
         if hasattr(batch,"tgt"):
 
-        
             tgt  = (batch.tgt.data.cpu().numpy()).T.squeeze()
 
         else:
@@ -757,7 +757,7 @@ class Translator(object):
                     src_map = src_map.index_select(1, select_indices)
                     print ("NOW")
                     print (src_map)
-            if lang is not None and lang=="EN" and False:
+            if lang is not None and lang=="EN":
                 self.model.decoder2.map_state(
                     lambda state, dim: state.index_select(dim, select_indices))
             else:
