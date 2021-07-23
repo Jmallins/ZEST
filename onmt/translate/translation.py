@@ -72,12 +72,12 @@ class TranslationBuilder(object):
                len(translation_batch["predictions"]))
         batch_size = batch.batch_size
 
-        preds, pred_score, attn, gold_score,maxvecs, indices = list(zip(
+        preds, pred_score, attn, gold_score, indices = list(zip(
             *sorted(zip(translation_batch["predictions"],
                         translation_batch["scores"],
                         translation_batch["attention"],
                         translation_batch["gold_score"],
-                        translation_batch["maxvecs"],
+                        # translation_batch["maxvecs"],
                         batch.indices.data),
                     key=lambda x: x[-1])))
 
@@ -92,7 +92,7 @@ class TranslationBuilder(object):
 
         translations = []
 
-
+        maxvecs = []
 
         for b in range(batch_size):
             if self._has_text_src:
