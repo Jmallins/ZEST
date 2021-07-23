@@ -432,7 +432,7 @@ class Translator(object):
             max_length,
             min_length=0,
             sampling_temp=1.0,
-            keep_topk=-1,
+            keep_topk=5,
             return_attention=False):
         """Alternative to beam search. Do random sampling at each step."""
 
