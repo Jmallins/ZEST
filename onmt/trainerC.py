@@ -417,8 +417,8 @@ class TrainerC(object):
                         target22 = torch.FloatTensor(target22).cuda()
                     closs = (closs+ 10*self.criticloss(cpred2,target22))
 
-                if "LM" in tags:
-                    closs = 0
+                # if "LM" in tags:
+                #     closs = 0
                 loss, batch_stats = self.train_loss(
                     batch,
                     outputs,

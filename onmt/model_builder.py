@@ -159,7 +159,7 @@ def build_base_model(model_opt, fields, gpu, checkpoint=None, gpu_id=None):
 
     decoder = build_decoder(model_opt, tgt_emb)
     if model_opt.multi:
-        print ("test 2")
+        print ("Creating a 2nd decoder.")
         decoder2 = build_decoder(model_opt, tgt_emb)
     else:
         decoder2 = None
