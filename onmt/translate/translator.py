@@ -443,8 +443,13 @@ class Translator(object):
 
         batch_size = batch.batch_size
 
+        tags = self.ctags 
+
+        if tags[-1] =="EN" or tags[-1]=="SI":
+            tags = tags[:-1]
+
         # Encoder forward.
-        src, enc_states, memory_bank, src_lengths = self._run_encoder(batch)
+        src, enc_states, memory_bank, src_lengths = self._run_encoder(batch, tags=tags)
         self.model.decoder.init_state(src, memory_bank, enc_states)
 
         use_src_map = self.copy_attn
@@ -637,7 +642,6 @@ class Translator(object):
 
         if tags[-1] =="EN" or tags[-1]=="SI":
             lang = tags[-1]
-            print('LG - ',lang)
             tags = tags[:-1]
         else:
             lang =None
