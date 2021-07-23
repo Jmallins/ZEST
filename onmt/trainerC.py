@@ -387,6 +387,8 @@ class TrainerC(object):
                 tgt = tgt_outer[j: j + trunc_size]
                 lang = tags[-1]
                 tags =tags[:-1]
+                print("Lang in ctags - ",lang)
+                print("Other tags in ctags - ",tags)
                 if self.grad_accum_count == 1:
                     self.optim.zero_grad()
                 outputs, attns,rep,rep2 = self.model(src, tgt, src_lengths, tags=tags,nograd=freezeit,bptt=bptt,dumpenc=True)
@@ -447,7 +449,7 @@ class TrainerC(object):
                             grads, float(1))
                     self.optim.step()
 
-                if tags[-1] ==int(2) and self.model.decoder2 is not None:
+                if lang == "EN" and self.model.decoder2 is not None:
 
                     if self.model.decoder2.state is not None:
                         self.model.decoder2.detach_state()
