@@ -92,7 +92,7 @@ class TranslationBuilder(object):
 
         translations = []
 
-        maxvecs = []
+        # maxvecs = []
 
         for b in range(batch_size):
             if self._has_text_src:
@@ -121,7 +121,8 @@ class TranslationBuilder(object):
             translation = Translation(
                 src[:, b] if src is not None else None,
                 src_raw, pred_sents, attn[b], pred_score[b],
-                gold_sent, gold_score[b],maxvecs[b]
+                gold_sent, gold_score[b],
+                # maxvecs[b]
             )
        
             translations.append(translation)
@@ -144,10 +145,12 @@ class Translation(object):
     """
 
     __slots__ = ["src", "src_raw", "pred_sents", "attns", "pred_scores",
-                 "gold_sent", "gold_score","maxvec"]
+                 "gold_sent", "gold_score"]
+                # ,"maxvec"]
 
     def __init__(self, src, src_raw, pred_sents,
-                 attn, pred_scores, tgt_sent, gold_score,maxvec):
+                 attn, pred_scores, tgt_sent, gold_score):
+                #  ,maxvec):
         self.src = src
         self.src_raw = src_raw
         self.pred_sents = pred_sents
@@ -155,7 +158,7 @@ class Translation(object):
         self.pred_scores = pred_scores
         self.gold_sent = tgt_sent
         self.gold_score = gold_score
-        self.maxvec = maxvec
+        # self.maxvec = maxvec
 
     def log(self, sent_number):
         """
