@@ -101,11 +101,11 @@ class RandomSampling(DecodeStrategy):
     def __init__(self, pad, bos, eos, batch_size, device,
                  min_length, block_ngram_repeat, exclusion_tokens,
                  return_attention, max_length, sampling_temp, keep_topk,
-                 memory_length):
+                 memory_length, i2w,batch):
         super(RandomSampling, self).__init__(
             pad, bos, eos, batch_size, device, 1,
             min_length, block_ngram_repeat, exclusion_tokens,
-            return_attention, max_length)
+            return_attention, max_length, i2w, batch)
         self.sampling_temp = sampling_temp
         self.keep_topk = keep_topk
         self.topk_scores = None

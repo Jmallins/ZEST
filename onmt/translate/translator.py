@@ -475,7 +475,7 @@ class Translator(object):
             self._tgt_pad_idx, self._tgt_bos_idx, self._tgt_eos_idx,
             batch_size, mb_device, min_length, self.block_ngram_repeat,
             self._exclusion_idxs, return_attention, self.max_length,
-            sampling_temp, keep_topk, memory_lengths)
+            sampling_temp, keep_topk, memory_lengths, i2w=self._tgt_vocab.itos,batch=batch)
 
         for step in range(max_length):
             # Shape: (1, B, 1)
