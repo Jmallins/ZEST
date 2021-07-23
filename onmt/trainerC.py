@@ -398,7 +398,7 @@ class TrainerC(object):
                 rep = rep[:min(src_lengths),:,:] 
                 rep = rep.view(-1,512)
                 cpred = self.model.critic(rep)
-                if int(1) == lang:
+                if "EN" == lang:
                     target2 = np.array([[0.95]*len(cpred)]).T
                 else:
                     target2 = np.array([[0.05]*len(cpred)]).T

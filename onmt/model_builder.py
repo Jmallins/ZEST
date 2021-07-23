@@ -233,7 +233,7 @@ def build_base_model(model_opt, fields, gpu, checkpoint=None, gpu_id=None):
                 model_opt.pre_word_vecs_dec)
 
         if model.decoder2 is not None:
-            if hasattr(model.decoder, 'embeddings'):
+            if hasattr(model.decoder2, 'embeddings'):
                 model.decoder2.embeddings.load_pretrained_vectors(
                 model_opt.pre_word_vecs_dec)
 

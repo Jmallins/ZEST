@@ -54,16 +54,16 @@ class NMTModel(nn.Module):
             * decoder output ``(tgt_len, batch, hidden)``
             * dictionary attention dists of ``(tgt_len, batch, src_len)``
         """
-        tgt = tgt[:-1]  # exclude last target from inputs
         if self.decoder2 is not None:
             lang = tags[-1]
             tags = tags[:-1]
+        else:
+            tgt = tgt[:-1]  # exclude last target from inputs
 
         enc_state, memory_bank, lengths,memory_bank2 = self.encoder(src, tags,nograd,lengths)
 
-
         if self.decoder2 is not None:
-            if  lang == int(1):
+            if  lang == "EN":
                
                 if bptt is False:
                     self.decoder.init_state(src, memory_bank, enc_state)
