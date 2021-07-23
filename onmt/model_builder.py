@@ -142,7 +142,6 @@ def build_base_model(model_opt, fields, gpu, checkpoint=None, gpu_id=None):
         src_emb = build_embeddings(model_opt, src_field)
     else:
         src_emb = None
-    print ("Model Multi - ",model_opt.multi)
     # Build encoder.
     encoder = build_encoder(model_opt, src_emb)
 
