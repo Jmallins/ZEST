@@ -58,11 +58,8 @@ class NMTModel(nn.Module):
         tgt = tgt[:-1]  # exclude last target from inputs
 
         if self.decoder2 is not None:
-            print("Seperating tags.")
             lang = tags[-1]
             tags = tags[:-1]
-            print("Lang - ", lang)
-            print("Other tags - ",tags)
 
         enc_state, memory_bank, lengths,memory_bank2 = self.encoder(src, tags,nograd,lengths)
 

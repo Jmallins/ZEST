@@ -198,10 +198,6 @@ def main(opt, device_id):
 
     vocab = torch.load(vocab2)
 
-
-
-    #print (valid_iter is None)
-    #valid_iter = valid_iter(datas[0][0],valid_iter)
     if len(opt.gpu_ranks):
         logger.info('Starting training on GPU: %s' % opt.gpu_ranks)
     else:
