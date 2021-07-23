@@ -391,6 +391,7 @@ class TrainerC(object):
                 if self.grad_accum_count == 1:
                     self.optim.zero_grad()
                 outputs, attns,rep,rep2 = self.model(src, tgt, src_lengths, tags=tags,nograd=freezeit,bptt=bptt,dumpenc=True)
+                print("Model.decoder - ",self.model.decoder)
                 bptt = True
 
                  
