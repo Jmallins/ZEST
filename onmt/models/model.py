@@ -67,8 +67,7 @@ class NMTModel(nn.Module):
         enc_state, memory_bank, lengths,memory_bank2 = self.encoder(src, tags,nograd,lengths)
 
         if self.decoder2 is not None:
-            if  lang == "EN":
-               
+            if  lang == "SI":
                 if bptt is False:
                     self.decoder.init_state(src, memory_bank, enc_state)
                 dec_out, attns = self.decoder(tgt, memory_bank,
