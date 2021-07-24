@@ -439,7 +439,7 @@ class Translator(object):
         assert self.beam_size == 1
 
         # TODO: support these blacklisted features.
-        assert self.block_ngram_repeat == 0
+        # assert self.block_ngram_repeat == 0
 
         batch_size = batch.batch_size
 
