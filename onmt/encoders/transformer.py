@@ -17,7 +17,7 @@ Implementation of "Attention is All You Need"
 """
 
 import torch.nn as nn
-from transformers import MBartModel
+# from transformers import MBartModel
 from onmt.encoders.encoder import EncoderBase
 from onmt.modules import MultiHeadedAttention
 from onmt.modules.position_ffn import PositionwiseFeedForward
@@ -116,7 +116,7 @@ class TransformerEncoder(EncoderBase):
         	self.extras.append(TransformerEncoderLayer(
                 d_model, heads, d_ff, dropout,
                 max_relative_positions=max_relative_positions))
-        self.extras["LM"] = MBartModel.from_pretrained('facebook/mbart-large-cc25')
+        # self.extras["LM"] = MBartModel.from_pretrained('facebook/mbart-large-cc25')
 
 # inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
 # outputs = model(**inputs)
@@ -164,11 +164,11 @@ class TransformerEncoder(EncoderBase):
         # print (ctags)
         for ii,tag in enumerate(ctags):
             if tag in self.tags:
-                if tag == "LM":
-                    lm_out  = self.extras["LM"](out)
-                    out = lm_out.last_hidden_state
-                else:
-                    out = self.extras[self.tags[tag]](out, mask)
+                # if tag == "LM":
+                #     lm_out  = self.extras["LM"](out)
+                #     out = lm_out.last_hidden_state
+                # else:
+                out = self.extras[self.tags[tag]](out, mask)
                     
         out = self.layer_norm(out)
         return emb, out.transpose(0, 1).contiguous(), lengths,out2.transpose(0, 1).contiguous()
