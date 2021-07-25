@@ -403,7 +403,7 @@ class TrainerC(object):
                 else:
                     target2 = np.array([[0.05]*len(cpred)]).T
                 target2 = torch.FloatTensor(target2)#.cuda()
-                closs =  10*self.criticloss(cpred,target2)
+                closs =  1*self.criticloss(cpred,target2)
 
                 if self.model.critic2 is not None:
                           
@@ -415,7 +415,7 @@ class TrainerC(object):
                     else:
                         target22 = np.array([[0.05]*len(cpred2)]).T
                         target22 = torch.FloatTensor(target22)#.cuda()
-                    closs = (closs+ 10*self.criticloss(cpred2,target22))
+                    closs = (closs+ 1*self.criticloss(cpred2,target22))
 
                 if "LM" in tags:
                     closs = 0
