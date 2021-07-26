@@ -1,5 +1,5 @@
 #!/bin/sh
 
 mkdir spm
-python spm.py
+python SiTS/spm.py
 mv spm ../spm
