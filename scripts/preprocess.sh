@@ -1,6 +1,6 @@
 #!/bin/sh
 
-python ZEST/preprocess.py -train_src SiTS/spm/spm/si-en.en -train_tgt SiTS/spm/si-en.si  -save_data data/EN-TRANS-COMP-SI --src_vocab data/sits.vocab.pt --tgt_vocab data/sits.vocab.pt
+python ZEST/preprocess.py -train_src SiTS/spm/si-en.en -train_tgt SiTS/spm/si-en.si  -save_data data/EN-TRANS-COMP-SI --src_vocab data/sits.vocab.pt --tgt_vocab data/sits.vocab.pt
 
 python ZEST/preprocess.py -train_src SiTS/spm/si-en.si -train_tgt SiTS/spm/si-en.en  -save_data data/SI-TRANS-COMP-EN --src_vocab data/sits.vocab.pt --tgt_vocab data/sits.vocab.pt
 
