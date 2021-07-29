@@ -397,7 +397,7 @@ class TrainerC(object):
                 else:
                     target2 = np.array([[0.05]*len(cpred)]).T
                 target2 = torch.FloatTensor(target2).cuda()
-                closs =  10*self.criticloss(cpred,target2)
+                closs =  1*self.criticloss(cpred,target2)
 
                 if self.model.critic2 is not None:
                           
