@@ -1,3 +1,4 @@
+from __future__ import print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +17,7 @@ limitations under the License.
 
 #!/usr/bin/env python
 """REST Translation server."""
-from __future__ import print_function
+
 import codecs
 import sys
 import os

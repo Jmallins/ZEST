@@ -1,3 +1,4 @@
+from __future__ import unicode_literals, print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,7 @@ limitations under the License.
 """
 
 """ Translation main class """
-from __future__ import unicode_literals, print_function
+
 
 import torch
 from onmt.inputters.text_dataset import TextMultiField
@@ -71,12 +72,12 @@ class TranslationBuilder(object):
                len(translation_batch["predictions"]))
         batch_size = batch.batch_size
 
-        preds, pred_score, attn, gold_score,maxvecs, indices = list(zip(
+        preds, pred_score, attn, gold_score, indices = list(zip(
             *sorted(zip(translation_batch["predictions"],
                         translation_batch["scores"],
                         translation_batch["attention"],
                         translation_batch["gold_score"],
-                        translation_batch["maxvecs"],
+
                         batch.indices.data),
                     key=lambda x: x[-1])))
 
@@ -120,7 +121,7 @@ class TranslationBuilder(object):
             translation = Translation(
                 src[:, b] if src is not None else None,
                 src_raw, pred_sents, attn[b], pred_score[b],
-                gold_sent, gold_score[b],maxvecs[b]
+                gold_sent, gold_score[b]
             )
        
             translations.append(translation)
@@ -143,10 +144,10 @@ class Translation(object):
     """
 
     __slots__ = ["src", "src_raw", "pred_sents", "attns", "pred_scores",
-                 "gold_sent", "gold_score","maxvec"]
+                 "gold_sent", "gold_score"]
 
     def __init__(self, src, src_raw, pred_sents,
-                 attn, pred_scores, tgt_sent, gold_score,maxvec):
+                 attn, pred_scores, tgt_sent, gold_score):
         self.src = src
         self.src_raw = src_raw
         self.pred_sents = pred_sents
@@ -154,7 +155,6 @@ class Translation(object):
         self.pred_scores = pred_scores
         self.gold_sent = tgt_sent
         self.gold_score = gold_score
-        self.maxvec = maxvec
 
     def log(self, sent_number):
         """

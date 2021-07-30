@@ -63,7 +63,7 @@ class NMTModel(nn.Module):
 
 
         if self.decoder2 is not None:
-            if  lang == int(1):
+            if  lang == "DE":
                
                 if bptt is False:
                     self.decoder.init_state(src, memory_bank, enc_state)

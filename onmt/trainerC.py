@@ -242,11 +242,10 @@ class TrainerC(object):
                 skip = min(0.975,skip)
                 # Warm up
                 if step < self.warm_up and not ("EN" in tags and "DE" in tags):
-                    skip = 1
+                    skip = 0
                 if randomint > skip and (self.cool_down is None or step < self.cool_down):
                     pass
                 else:
-                
                     (batches, normalization) = next(bn)
     
 
@@ -254,7 +253,7 @@ class TrainerC(object):
                    
 
                     step = self.optim.training_step
-                    p =min(1,(step-100)/220000)
+                    p =min(1,(step-100)/train_steps)
                     sl  = max(0, 2. / (1. + np.exp(-10. * p)) - 1)
                     self.model.critic.lambda_=sl
 
@@ -387,8 +386,8 @@ class TrainerC(object):
             for j in range(0, target_size-1, trunc_size):
                 # 1. Create truncated target.
                 tgt = tgt_outer[j: j + trunc_size]
-                lang = tags[-1]
-                tags =tags[:-1]
+                lang = tags[0]
+                tags =tags[1:]
                 if self.grad_accum_count == 1:
                     self.optim.zero_grad()
                 outputs, attns,rep,rep2 = self.model(src, tgt, src_lengths, tags=tags,nograd=freezeit,bptt=bptt,dumpenc=True)
@@ -398,7 +397,7 @@ class TrainerC(object):
                 rep = rep[:min(src_lengths),:,:] 
                 rep = rep.view(-1,512)
                 cpred = self.model.critic(rep)
-                if int(1) == lang:
+                if "EN" == lang:
                     target2 = np.array([[0.95]*len(cpred)]).T
                 else:
                     target2 = np.array([[0.05]*len(cpred)]).T
@@ -410,7 +409,7 @@ class TrainerC(object):
                     rep2 = rep2[:min(src_lengths),:,:]
                     rep2 = rep2.view(-1,512)
                     cpred2 = self.model.critic2(rep2)
-                    if  int(1)== tags[-1]:
+                    if  "EN"== tags[0]:
                         target22 = np.array([[0.95]*len(cpred2)]).T
                     else:
                         target22 = np.array([[0.05]*len(cpred2)]).T
@@ -418,7 +417,7 @@ class TrainerC(object):
                     closs = (closs+ 1*self.criticloss(cpred2,target22))
 
                 if "LM" in tags:
-                    closs = 0
+                    closs = 0 * closs
                 loss, batch_stats = self.train_loss(
                     batch,
                     outputs,
@@ -429,7 +428,6 @@ class TrainerC(object):
                     trunc_size=trunc_size,criticloss=closs)
      
                 if loss is not None:
-                    print ("Not none")
                     self.optim.backward(loss)
 
                 if closs is None:
@@ -449,14 +447,16 @@ class TrainerC(object):
                         onmt.utils.distributed.all_reduce_and_rescale_tensors(
                             grads, float(1))
                     self.optim.step()
+                if False:
+                    if tags[-1] =="DE" and self.model.decoder2 is not None:
+                        print ("DE!!!")
 
-                if tags[-1] ==int(2) and self.model.decoder2 is not None:
-
-                    if self.model.decoder2.state is not None:
-                        self.model.decoder2.detach_state()
-                else:
-                    if self.model.decoder.state is not None:
-                        self.model.decoder.detach_state()
+                        if self.model.decoder2.state is not None and False :
+                            self.model.decoder2.detach_state()
+                    else:
+                        print ("EN")
+                        if self.model.decoder.state is not None and False:
+                            self.model.decoder.detach_state()
 
         # in case of multi step gradient accumulation,
         # update only after accum batches

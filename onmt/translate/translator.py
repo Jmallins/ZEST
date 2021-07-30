@@ -1,3 +1,4 @@
+from __future__ import print_function
 """Copyright 2021 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +16,7 @@ limitations under the License.
 
 #!/usr/bin/env python
 """ Translator Class and builder """
-from __future__ import print_function
+
 import codecs
 import os
 import math
@@ -659,7 +660,6 @@ class Translator(object):
 
         thing =  (enc_states.data.cpu().numpy())
         lengths =  (src_lengths.data.cpu().numpy())
-        maxvecs = [] 
 
 
         self.model.decoder.init_state(src, memory_bank, enc_states)
@@ -756,17 +756,9 @@ class Translator(object):
                     src_map = src_map.index_select(1, select_indices)
                     print ("NOW")
                     print (src_map)
-            if lang is not None and lang=="EN" and False:
-                self.model.decoder2.map_state(
-                    lambda state, dim: state.index_select(dim, select_indices))
-            else:
-                self.model.decoder.map_state(
-                    lambda state, dim: state.index_select(dim, select_indices))
-        #print (len(beam.scores))
         results["scores"] = beam.scores
         results["predictions"] = beam.predictions
         results["attention"] = beam.attention
-        results["maxvecs"] = []
         if lang is not None:
             self.decoder=enc1
         return results
